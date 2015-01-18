@@ -15,6 +15,7 @@ located in datacentres (belongs-to relationship) and categorized (many-to-many r
 Provides:
 
 a) GUI
+
 b) RESTful API
 
 Prerequisites:
