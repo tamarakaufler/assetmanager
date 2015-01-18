@@ -61,6 +61,7 @@ cRud (read):
 
 Crud (create):
 
+    curl -X POST -T data4crud/asset.json http://localhost:3003/api/asset
     curl -X POST -F file=@data4crud/asset.json http://localhost:3003/api/asset
         where file contains json structure:
 {
