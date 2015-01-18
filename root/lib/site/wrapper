@@ -1,0 +1,5 @@
+[% IF template.name.match('something.tt') %]
+  [% content WRAPPER site/popup_html + site/content %]
+[% ELSE %]
+  [% content WRAPPER site/html + site/content %]
+[% END %]

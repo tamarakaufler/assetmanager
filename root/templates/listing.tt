@@ -1,0 +1,11 @@
+    <ul>
+    [% FOREACH entity IN entities %]
+        [% entity.name %]<br />
+        <li>
+        [% FOREACH prop IN entity.keys.sort %]
+            [% prop %] - [% entity.$prop %]<br />
+        [% END %]
+        </li>
+        <br />
+    [% END %]
+    </ul>
