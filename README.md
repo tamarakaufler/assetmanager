@@ -79,5 +79,6 @@ Logging of create/update/delete actions done through API:
 --------------------------------------------------------
 
     uses Log:Log4perl, configured to log to file (TODO: log to database)
-    overrides DBIx insert/update/delete to add logging
+    overrides DBIx insert/update/delete to add logging => the Result classes have the logging component added, so a copy of the original ones,
+        created by the Catalyst helper script are backed up in case the classes need to be refreshed after a database change
 
