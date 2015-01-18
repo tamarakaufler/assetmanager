@@ -17,6 +17,11 @@ Provides:
 a) GUI
 b) RESTful API
 
+Prerequisites:
+
+    memcached running
+    sql directory contains SQL for creating the database
+
 Implementation:
 
     memcached for caching
