@@ -9,7 +9,8 @@ Playing, having fun, trying out things, sharing and more
 Work in progress
 ----------------
 
-Web based admin tool for managing servers, located in datacentres (belongs-to relationship) and categorized (many-to-many relationship)
+Web based admin tool for managing servers, 
+located in datacentres (belongs-to relationship) and categorized (many-to-many relationship)
 
 Provides:
 
@@ -19,7 +20,8 @@ b) RESTful API
 Implementation:
 
     memcached for caching
-    DBIx introspection used to create queries for any entity (table) without unnecessary code duplication
+    DBIx introspection used to create queries for any entity (table) 
+    without unnecessary code duplication
 
 Access:
 
