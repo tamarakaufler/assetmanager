@@ -32,6 +32,7 @@ Implementation:
 Access:
 
 start running the application by issuing: 
+    
     script/assetmanager_server.pl -h localhost -p 3003 (any port you wish)
 
     http://localhost:3003/manager/list/asset
