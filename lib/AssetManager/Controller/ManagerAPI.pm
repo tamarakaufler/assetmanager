@@ -3,11 +3,17 @@ use Moose;
 use namespace::autoclean;
 use v5.018;
 
+use Data::Dumper qw(Dumper);
+
 use AssetManager::Controller::Helper::Manager qw(
 				                    get_listing
 				                    create_entity
 				                    update_entity
 				                    delete_entity
+
+                                                    throws_error_api
+
+                                                    process_request4change_data
                                               );
 
 BEGIN { extends 'Catalyst::Controller::REST'; }
@@ -41,6 +47,8 @@ sub api  :Path('/api')   :ActionClass('REST') {
     my ( $self, $c, @url_params ) = @_;
 
     # TODO: throw error if the first url parameter is not a valid entity (one of the database tables)
+    # if type not one of the selected database tables 
+
     $c->stash->{ entity_type }   = shift @url_params;
     $c->stash->{ search_params } = \@url_params;
 }
@@ -66,6 +74,8 @@ sub api_GET {
 
 =head2 api_PUT
 
+updates an entity
+
 =cut
 
 sub api_PUT {
@@ -75,11 +85,23 @@ sub api_PUT {
 
 =head2 api_POST
 
+creates an entity
+
 =cut
 
 sub api_POST {
     my ( $self, $c ) = @_;
 
+    my $data = process_request4change_data($c);
+    throws_error_api($self, $c, $data);
+
+    my $response_data = create_entity($c, $c->stash->{entity_type}, $data);
+    throws_error_api($self, $c, $response_data);
+
+    $self->status_ok(
+                        $c,
+                        entity => $response_data,
+                    );
 }
 
 =head2 api_DELETE

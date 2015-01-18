@@ -12,6 +12,7 @@ use v5.018;
 
 use Lingua::EN::Inflect         qw(PL);
 use Lingua::EN::Inflect::Number qw(to_S);
+use JSON                        qw(from_json);
 
 use Data::Dumper qw(Dumper);
 
@@ -24,6 +25,8 @@ our @EXPORT_OK = qw(
                     create_entity
                     update_entity
                     delete_entity
+
+                    process_request4change_data
 
                     throws_error_api
                     error_exists_api
@@ -40,10 +43,52 @@ used by Controllers
     update_entity
     delete_entity
 
+    process_request4change_data
+
     throws_error_api
     error_exists_api
 
 =cut
+
+=head3 process_request4change_data
+
+=cut
+
+sub process_request4change_data {
+        my ($c) = @_; 
+
+        my ($type, $upload, $data);
+
+        $type   = $c->stash->{entity_type};
+        $upload = $c->request->upload('file');
+
+        ## provided through -T/-d
+        if ($c->req->data) {
+            ## curl input already inflated/deserialized        
+            $data = $c->req->data;
+        }
+        ## provided through -F
+        elsif ($upload) {
+                eval {
+                    my $fh = $upload->fh;
+                    {
+                        local $/; 
+                        my $encoded = <$fh>;
+                        chomp $encoded;
+                        $data = from_json($encoded);
+                    }
+                };
+                if ($@) {
+                        my $error;
+                        $error->{ status }  = 'status_bad_request';
+                        $error->{ message } = "Error: There were problems with processing your data: " . substr($@, 0, 160 );
+    
+                        return { error => $error };
+                }
+        }
+
+        return $data;
+}
 
 sub get_listing {
     my ($c, $type, $params) = @_;
@@ -58,6 +103,27 @@ sub get_listing {
 
 sub create_entity {
     my ($c, $type, $data) = @_;
+
+    my ($entity, $response);
+    eval {
+        $entity = $c->model('AssetManagerDB::' . ucfirst(lc $type))
+                    ->create($data);
+    };
+
+    if ($@) {
+        my $error = { error => { status  => 'status_bad_request', 
+                                 message => "$type could not be created: " . substr($@, 0, 160 ),}
+                    };
+        return $error;
+    }
+
+    my $uri = $c->uri_for('/api/$type/id/' . $entity->id);
+
+    # create a hashref response about the created object(s)a and return that
+    $response = { %$data, link => "$uri" };
+
+    return $response;
+
 }
 
 sub update_entity {
