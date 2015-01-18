@@ -33,7 +33,8 @@ Access:
 
 start running the application by issuing: 
     
-    script/assetmanager_server.pl -h localhost -p 3003 (any port you wish)
+    script/assetmanager_server.pl -h localhost -p 3003 (any port that 
+    works for you)
 
     http://localhost:3003/manager/list/asset
     http://localhost:3003/manager/list/asset?category=2
