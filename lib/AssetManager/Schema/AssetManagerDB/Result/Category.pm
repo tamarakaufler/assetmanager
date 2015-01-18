@@ -28,7 +28,7 @@ extends 'DBIx::Class::Core';
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime");
+__PACKAGE__->load_components(qw(+AssetManager::Schema::AuditLogging InflateColumn::DateTime));
 
 =head1 TABLE: C<category>
 
