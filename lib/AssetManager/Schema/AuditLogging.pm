@@ -21,8 +21,6 @@ Log::Log4perl->init("$Bin/../log4perl.init");
 
 my $logger = Log::Log4perl->get_logger("AssetManager::Schema::AuditLogging");
 
-#use AssetManager::Schema::Helper::AuditLoggingHelper qw(updateAuditLog serializeDiff objToHash);
-
 sub all {
     my $self = shift;
 
@@ -37,38 +35,30 @@ sub all {
 sub insert {
     my $self = shift;
 
+    say STDERR "*** Inserting new entity ***";
+    $logger->info("New entity created: " . Dumper($self));
+
     my $entity = $self->next::method( @_ );
-
-#    updateAuditLog( $entity, 'I', 0 );
-
-    return $entity;
-}
-
-sub delete {
-    my $self = shift;
-
-#    my $oriHash = objToHash( $self );
-
-    my $entity  = $self->next::method( @_ );
-
- #   my ( $action, $data ) = serializeDiff( $oriHash, {} );
-
- #   updateAuditLog( $entity, 'P', 0, $data );
-
     return $entity;
 }
 
 sub update {
     my $self = shift;
 
-#    my $oriHash = objToHash( $self );
+    say STDERR "*** Updating new entity ***";
+    $logger->info("Entity updated: " . Dumper($self));
 
     my $entity  = $self->next::method( @_ );
+    return $entity;
+}
 
- #   my ( $action, $data )  = serializeDiff( $oriHash, objToHash( $entity ) );
+sub delete {
+    my $self = shift;
 
- #   updateAuditLog( $entity, $action, 0, $data );
+    say STDERR "*** Deleting new entity ***";
+    $logger->info("Entity deleted: " . Dumper($self));
 
+    my $entity  = $self->next::method( @_ );
     return $entity;
 }
 
